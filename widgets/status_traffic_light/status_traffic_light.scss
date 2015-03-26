@@ -1,0 +1,40 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color: #000000;
+$value-color: #FFFFFF;
+$title-color: rgba(255, 255, 255, 0.7);
+$text-color: rgba(255, 255, 255, 0.7);
+$updated-at-color: rgba(0, 0, 0, 0.3);
+ 
+// ----------------------------------------------------------------------------
+// Widget styles
+// ----------------------------------------------------------------------------
+.widget {
+ 
+  background-color: $background-color;
+  
+  .title {
+    color: $title-color;
+  }
+ 
+  .value {
+    color: $value-color;
+  }
+ 
+  .more-info {
+    color: $moreinfo-color;
+  }
+  
+  .updated-at {
+    color: $updated-at-color;
+  }
+  
+  &.large h3 {
+    font-size: 65px;
+  }
+}
+ 
+.rag_r { background-color: #FF0000; }
+.rag_a { background-color: #FBFF19; }
+.rag_g { background-color: #00FF21; }

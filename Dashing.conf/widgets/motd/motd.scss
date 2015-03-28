@@ -12,7 +12,8 @@
 // Sass declarations
 // ----------------------------------------------------------------------------
 $background-color: #000000;
-$title-color: rgba(255, 255, 255, 0.7);
+$message-auto-color: rgba(255, 255, 255, 0.4);
+$message-manual-color: rgba(255, 255, 255, 0.7);
 $updated-at-color: rgba(0, 0, 0, 0.5);
  
 // ----------------------------------------------------------------------------
@@ -23,15 +24,21 @@ $updated-at-color: rgba(0, 0, 0, 0.5);
   background-color: $background-color;
   @include transition(background-color, 1s, linear);
  
-  .title {
-    color: $title-color;
-  }
- 
   .updated-at {
     color: $updated-at-color;
   }
- 
 }
 
-.message-auto { background-color: #FF003C; } 
-.message-manual { background-color: #FABE28; }
+.message-auto { 
+  background-color: #000000;
+  .status {
+    color: $message-auto-color;
+  }
+}
+
+.message-manual {
+  background-color: #B200FF;
+  .status {
+    color: $message-manual-color;
+  }
+}

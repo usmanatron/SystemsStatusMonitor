@@ -1,48 +1,41 @@
 class Dashing.Motd extends Dashing.Widget 
 
   @accessor 'message', ->
-    currentMessage = @get 'currentMessage'
-    currentMessageOrigin = @get 'currentMessageOrigin'
-    newMessage =  @get 'newMessage'
-    newMessageOrigin =  @get 'newMessageOrigin'
-
-    if currentMessageOrigin is "auto"
-       newMessage
-    else
-      if newMessageOrigin is "auto" and currentMessage isnt ""
-        currentMessage
-      else
-        newMessage
+    @get 'displayMessage'
 
   @accessor 'origin', ->
-    currentMessage = @get 'currentMessage'
-    currentMessageOrigin = @get 'currentMessageOrigin'
-    newMessage =  @get 'newMessage'
-    newMessageOrigin =  @get 'newMessageOrigin'
-
-    if currentMessageOrigin is "auto"
-       newMessageOrigin
-    else
-      if newMessageOrigin is "auto" and currentMessage isnt ""
-        currentMessageOrigin
-      else
-        newMessageOrigin
+    @get 'displayOrigin'
 
   constructor: ->
     super
- 
+
+  ready: ->
+    @set "displayMessage", ""
+    @set "displayOrigin", "auto"
+
   onData: (data) ->
     node = $(@node)        
     
     currentMessage = @get 'message'
-    currentMessageOrigin = @get 'origin'
+    currentOrigin = @get 'origin'
+    newMessage =  data.message
+    newOrigin =  data.origin
 
-    @set "currentMessage", currentMessage
-    @set "currentMessageOrigin", currentMessageOrigin
-    @set "newMessage", data.message
-    @set "newMessageOrigin", data.origin
-   
-    backgroundClass = "message-#{currentMessageOrigin}"
+    if currentOrigin is "auto"
+      @set "displayMessage", newMessage
+      @set "displayOrigin", newOrigin
+      backgroundClass = "message-#{newOrigin}"      
+    else
+      if newOrigin is "auto" and currentMessage isnt ""
+        @set "displayMessage", currentMessage
+        @set "displayOrigin", currentOrigin
+        backgroundClass = "message-#{currentOrigin}"      
+
+      else
+        @set "displayMessage", newMessage
+        @set "displayOrigin", newOrigin
+        backgroundClass = "message-#{newOrigin}"      
+
     lastClass = @get "lastClass"
     node.toggleClass "#{lastClass} #{backgroundClass}"
     @set "lastClass", backgroundClass

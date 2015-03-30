@@ -7,12 +7,22 @@ class Dashing.Ragstatus extends Dashing.Widget
       when "g" then ""
       else "[Unknown error level]"
 
+
   constructor: ->
     super
+
+  ready: ->
+    rag = @get('rag')
+    @setBackground(rag)
  
   onData: (data) ->
-    node = $(@node)        
-    backgroundClass = "level-#{data.rag}"
+    rag = data.rag
+    @setBackground(rag)
+
+  setBackground: (rag) ->
+    node = $(@node)
+    backgroundClass = "level-#{rag}"
     lastClass = @get "lastClass"
+
     node.toggleClass "#{lastClass} #{backgroundClass}"
     @set "lastClass", backgroundClass

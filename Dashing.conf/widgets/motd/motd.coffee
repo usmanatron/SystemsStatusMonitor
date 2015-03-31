@@ -1,42 +1,53 @@
 class Dashing.Motd extends Dashing.Widget 
+# The messages are stored in cookies to ensure they survive page refreshes (only
+# the last event is replayed, which means that the manually added message can be lost).
 
   @accessor 'message', ->
-    @get 'displayMessage'
+    autoMessage = @get 'autoMessage'
+    manualMessage = @get 'manualMessage'
 
-  @accessor 'origin', ->
-    @get 'displayOrigin'
+    if manualMessage is "" or manualMessage is undefined
+      @setBackground("auto")
+      autoMessage
+    else
+      @setBackground("manual")
+      manualMessage
 
   constructor: ->
     super
 
+  ready: ->
+    autoMessage = @getCookie('autoMessage')
+    manualMessage = @getCookie('manualMessage')
+    @set 'autoMessage', autoMessage
+    @set 'manualMessage', manualMessage
+
   onData: (data) ->
-    currentOrigin = @get 'displayOrigin'
-    newMessage =  data.message
-    newOrigin =  data.origin
-
-    if currentOrigin isnt "manual"
-      # Overwrite in all cases
-      @updateDisplay(newMessage, newOrigin)
+    message = data.message
+    if data.origin is "auto"
+      @set 'autoMessage', message
+      @setCookie('autoMessage', message)
     else
-      if newOrigin is "auto"
-        # Don't overwrite display however store for later
-        @set 'autoMessage', newMessage
-      else
-        if newMessage is ""
-          # Empty new manual message => fallback to last auto message
-          autoMessage = @get 'autoMessage'
-          @updateDisplay(autoMessage, 'auto')
-        else
-          # Update manual message
-          @updateDisplay(newMessage, newOrigin)
+      @set 'manualMessage', message
+      @setCookie('manualMessage', message)
 
-
-  updateDisplay: (message,origin) ->
+  setBackground: (origin) ->
     node = $(@node)
-    @set 'displayMessage', message
-    @set 'displayOrigin', origin
-
     backgroundClass = "message-#{origin}"
     lastClass = @get "lastClass"
     node.toggleClass "#{lastClass} #{backgroundClass}"
     @set "lastClass", backgroundClass
+
+  setCookie: (name, value) ->
+    document.cookie = name + "=" + value + "; path=/"
+
+  getCookie: (name) ->
+    nameEQ = name + "="
+    ca = document.cookie.split(";")
+    i = 0
+    while i < ca.length
+      c = ca[i]
+      c = c.substring(1, c.length)  while c.charAt(0) is " "
+      return c.substring(nameEQ.length, c.length)  if c.indexOf(nameEQ) is 0
+      i++
+    null

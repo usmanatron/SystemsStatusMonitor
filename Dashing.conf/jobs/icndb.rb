@@ -15,5 +15,5 @@ SCHEDULER.every '24h', :first_in => 0 do |job|
   j = JSON[response.body]
   joke = j['value']['joke']
 
-  send_event('motd', { message: "#{joke}" , origin: "auto" })
+  send_event('motd', { message: "#{joke}", origin: 'auto' })
 end

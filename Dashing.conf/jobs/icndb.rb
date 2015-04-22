@@ -14,7 +14,7 @@ SCHEDULER.every '24h', :first_in => 0 do |job|
 
   # Convert to JSON and save joke
   j = JSON[response.body]
-  @@joke = j['value']['joke']
+  @@joke = j['value']['joke'].gsub('Chuck Norris', 'Usman')
 
 
 

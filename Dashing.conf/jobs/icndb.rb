@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'htmlentities'
 
 server = "http://api.icndb.com"
 @@joke
@@ -12,12 +13,9 @@ SCHEDULER.every '24h', :first_in => 0 do |job|
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   response = http.request(Net::HTTP::Get.new(url.request_uri))
 
-  # Convert to JSON and save joke
-  j = JSON[response.body]
-  @@joke = j['value']['joke']
-
-
-
+  # Convert to JSON and save joke after HTML decoding
+  response = JSON[response.body]
+  @@joke = HTMLEntities.new.decode response['value']['joke']
 end
 
 SCHEDULER.every '10s', :first_in => 0 do |job|

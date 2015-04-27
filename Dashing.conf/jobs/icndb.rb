@@ -6,7 +6,7 @@ server = "http://api.icndb.com"
 @@joke
 
 SCHEDULER.every '24h', :first_in => 0 do |job|
-  url = URI.parse("#{server}/jokes/random?limitTo=[nerdy]")
+  url = URI.parse("#{server}/jokes/random?limitTo=[nerdy]&firstName=Usman&lastName=Iqbal")
   http = Net::HTTP.new(url.host, url.port)
   http.use_ssl = (url.scheme == 'https')
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -14,7 +14,7 @@ SCHEDULER.every '24h', :first_in => 0 do |job|
 
   # Convert to JSON and save joke
   j = JSON[response.body]
-  @@joke = j['value']['joke'].gsub('Chuck Norris', 'Usman')
+  @@joke = j['value']['joke']
 
 
 
